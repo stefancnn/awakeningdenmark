@@ -1,0 +1,6 @@
+{
+  "name": "Denmark: The Time Is Now | National Harvest & Fire Camp 2027",
+  "description": "A nationwide Christian awakening movement in Denmark. Equipping believers, commissioning evangelists, and hosting Fire Camp with Christ for All Nations in Copenhagen (Late June 2027).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
