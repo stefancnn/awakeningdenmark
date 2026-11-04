@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight, Flame } from 'lucide-react';
+import heroCopenhagenImg from '../assets/images/denmark_copenhagen_hero_1793697122410.jpg';
 
 interface HeroProps {
   onOpenWaitlist: () => void;
@@ -11,7 +12,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenWaitlist }) => {
       {/* Background Image: Copenhagen Nyhavn with dramatic Nordic sky & subtle Danish flag banner */}
       <div className="absolute inset-0 z-0">
         <img
-          src="/src/assets/images/denmark_copenhagen_hero_1793697122410.jpg"
+          src={heroCopenhagenImg}
           alt="Copenhagen waterfront at sunset with Danish flag motif in the sky"
           className="w-full h-full object-cover object-center scale-105 transition-transform duration-1000 ease-out"
           referrerPolicy="no-referrer"

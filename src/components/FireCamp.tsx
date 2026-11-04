@@ -1,5 +1,7 @@
 import React from 'react';
 import { Flame, ArrowRight, Calendar, MapPin, Zap } from 'lucide-react';
+import cfanCrusadeImg from '../assets/images/cfan_gospel_crusade_1793697137949.jpg';
+import fireCampEvangelismImg from '../assets/images/fire_camp_evangelism_1793697124075.jpg';
 
 interface FireCampProps {
   onOpenWaitlist: () => void;
@@ -61,7 +63,7 @@ export const FireCamp: React.FC<FireCampProps> = ({ onOpenWaitlist }) => {
             {/* Crusade Photography */}
             <div className="lg:col-span-7 relative min-h-[360px] sm:min-h-[460px]">
               <img
-                src="/src/assets/images/cfan_gospel_crusade_1793697137949.jpg"
+                src={cfanCrusadeImg}
                 alt="Christ for All Nations mass gospel campaign at night with thousands worshiping"
                 className="w-full h-full object-cover object-center"
                 referrerPolicy="no-referrer"
@@ -170,7 +172,7 @@ export const FireCamp: React.FC<FireCampProps> = ({ onOpenWaitlist }) => {
             </div>
             <div className="lg:col-span-6 h-72 sm:h-96 relative">
               <img
-                src="/src/assets/images/fire_camp_evangelism_1793697124075.jpg"
+                src={fireCampEvangelismImg}
                 alt="Young European Christians street outreach in Copenhagen"
                 className="w-full h-full object-cover object-center"
                 referrerPolicy="no-referrer"
