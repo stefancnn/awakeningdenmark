@@ -65,8 +65,11 @@ export function generateTicketNumber(prefix = 'DK-FIRE'): string {
   return `${prefix}-${random}`;
 }
 
-export function saveWaitlistEntry(entry: Omit<WaitlistEntry, 'id' | 'createdAt' | 'ticketNumber'>): WaitlistEntry {
-  const newEntry: WaitlistEntry = {
+export function saveWaitlistEntry(
+  entry: Omit<WaitlistEntry, 'id' | 'createdAt' | 'ticketNumber'>,
+  existingRecord?: WaitlistEntry
+): WaitlistEntry {
+  const newEntry: WaitlistEntry = existingRecord || {
     ...entry,
     id: `entry_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
     createdAt: new Date().toISOString(),
@@ -75,7 +78,9 @@ export function saveWaitlistEntry(entry: Omit<WaitlistEntry, 'id' | 'createdAt' 
 
   try {
     const existing = getWaitlistEntries();
-    const updated = [newEntry, ...existing];
+    // Prevent duplicate entries with same id
+    const filtered = existing.filter((item) => item.id !== newEntry.id && item.email !== newEntry.email);
+    const updated = [newEntry, ...filtered];
     if (typeof window !== 'undefined' && window.localStorage) {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
     }

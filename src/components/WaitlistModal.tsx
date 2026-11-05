@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { X, Flame, AlertCircle, ArrowRight, CheckCircle } from 'lucide-react';
+import { X, Flame, ArrowRight, CheckCircle } from 'lucide-react';
 import { FormErrors, WaitlistEntry } from '../types';
-import { validateWaitlistForm, saveWaitlistEntry } from '../utils/waitlist';
+import { validateWaitlistForm } from '../utils/waitlist';
+import { submitWaitlist } from '../services/api';
 import { TicketPass } from './TicketPass';
 
 interface WaitlistModalProps {
@@ -35,7 +36,7 @@ export const WaitlistModal: React.FC<WaitlistModalProps> = ({ isOpen, onClose })
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -46,8 +47,8 @@ export const WaitlistModal: React.FC<WaitlistModalProps> = ({ isOpen, onClose })
       return;
     }
 
-    setTimeout(() => {
-      const saved = saveWaitlistEntry({
+    try {
+      const saved = await submitWaitlist({
         firstName: formData.firstName.trim(),
         lastName: formData.lastName.trim(),
         email: formData.email.trim(),
@@ -59,22 +60,25 @@ export const WaitlistModal: React.FC<WaitlistModalProps> = ({ isOpen, onClose })
       });
 
       setTicket(saved);
+    } catch (err: any) {
+      console.error('Modal submit error:', err);
+    } finally {
       setIsSubmitting(false);
-    }, 200);
+    }
   };
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs overflow-y-auto"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
-      <div className="relative w-full max-w-xl bg-neutral-900 border border-neutral-800 rounded-3xl p-6 sm:p-8 text-white shadow-2xl my-8">
+      <div className="relative w-full max-w-lg bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 text-slate-900 shadow-2xl my-6">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors cursor-pointer"
+          className="absolute top-4 right-4 p-2 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
           aria-label="Close waitlist modal"
         >
           <X className="w-5 h-5" />
@@ -83,11 +87,11 @@ export const WaitlistModal: React.FC<WaitlistModalProps> = ({ isOpen, onClose })
         {ticket ? (
           <div>
             <div className="text-center mb-6">
-              <div className="inline-flex items-center gap-1.5 text-emerald-400 font-bold text-xs uppercase tracking-wider mb-2">
+              <div className="inline-flex items-center gap-1.5 text-emerald-600 font-bold text-xs uppercase tracking-wider mb-2">
                 <CheckCircle className="w-4 h-4" />
-                <span>Priority Pass Generated</span>
+                <span>Priority Pass Created</span>
               </div>
-              <h3 className="text-xl sm:text-2xl font-black uppercase text-white">
+              <h3 className="text-xl sm:text-2xl font-black uppercase text-slate-950">
                 You&apos;re On The Waitlist!
               </h3>
             </div>
@@ -98,23 +102,23 @@ export const WaitlistModal: React.FC<WaitlistModalProps> = ({ isOpen, onClose })
           <div>
             {/* Header */}
             <div className="mb-6">
-              <div className="inline-flex items-center gap-2 text-red-500 font-bold text-xs uppercase tracking-widest mb-2">
-                <Flame className="w-4 h-4 fill-red-500" />
-                <span>Copenhagen · Late June 2027 (Dates TBC)</span>
+              <div className="inline-flex items-center gap-1.5 text-red-600 font-bold text-xs uppercase tracking-wider mb-2">
+                <Flame className="w-4 h-4 fill-red-600" />
+                <span>Copenhagen · Late June 2027</span>
               </div>
-              <h2 id="modal-title" className="text-2xl sm:text-3xl font-black uppercase text-white">
-                Join The Priority Waitlist
+              <h2 id="modal-title" className="text-2xl font-black uppercase text-slate-950">
+                Join The Waitlist
               </h2>
-              <p className="text-neutral-400 text-xs sm:text-sm mt-1">
-                Enter your details to receive priority booking notice for Fire Camp Copenhagen.
+              <p className="text-slate-600 text-xs sm:text-sm mt-1">
+                Enter your details to receive early priority access for Fire Camp Copenhagen.
               </p>
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} noValidate className="space-y-4">
+            <form onSubmit={handleSubmit} noValidate className="space-y-3.5">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label htmlFor="modal-firstName" className="block text-[11px] font-bold uppercase tracking-wider text-neutral-300 mb-1">
+                  <label htmlFor="modal-firstName" className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1">
                     First Name *
                   </label>
                   <input
@@ -124,15 +128,15 @@ export const WaitlistModal: React.FC<WaitlistModalProps> = ({ isOpen, onClose })
                     value={formData.firstName}
                     onChange={handleInputChange}
                     placeholder="First Name"
-                    className="w-full px-3 py-2.5 rounded-lg bg-neutral-950 border border-neutral-800 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500"
+                    className="w-full px-3 py-2.5 rounded-lg bg-white border border-slate-300 text-slate-900 text-xs placeholder-slate-400 focus:outline-none focus:border-red-600"
                   />
                   {errors.firstName && (
-                    <p className="text-[11px] text-red-400 mt-0.5">{errors.firstName}</p>
+                    <p className="text-[11px] text-red-600 mt-0.5">{errors.firstName}</p>
                   )}
                 </div>
 
                 <div>
-                  <label htmlFor="modal-lastName" className="block text-[11px] font-bold uppercase tracking-wider text-neutral-300 mb-1">
+                  <label htmlFor="modal-lastName" className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1">
                     Last Name *
                   </label>
                   <input
@@ -142,17 +146,17 @@ export const WaitlistModal: React.FC<WaitlistModalProps> = ({ isOpen, onClose })
                     value={formData.lastName}
                     onChange={handleInputChange}
                     placeholder="Last Name"
-                    className="w-full px-3 py-2.5 rounded-lg bg-neutral-950 border border-neutral-800 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500"
+                    className="w-full px-3 py-2.5 rounded-lg bg-white border border-slate-300 text-slate-900 text-xs placeholder-slate-400 focus:outline-none focus:border-red-600"
                   />
                   {errors.lastName && (
-                    <p className="text-[11px] text-red-400 mt-0.5">{errors.lastName}</p>
+                    <p className="text-[11px] text-red-600 mt-0.5">{errors.lastName}</p>
                   )}
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label htmlFor="modal-email" className="block text-[11px] font-bold uppercase tracking-wider text-neutral-300 mb-1">
+                  <label htmlFor="modal-email" className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1">
                     Email Address *
                   </label>
                   <input
@@ -162,15 +166,15 @@ export const WaitlistModal: React.FC<WaitlistModalProps> = ({ isOpen, onClose })
                     value={formData.email}
                     onChange={handleInputChange}
                     placeholder="you@example.dk"
-                    className="w-full px-3 py-2.5 rounded-lg bg-neutral-950 border border-neutral-800 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500"
+                    className="w-full px-3 py-2.5 rounded-lg bg-white border border-slate-300 text-slate-900 text-xs placeholder-slate-400 focus:outline-none focus:border-red-600"
                   />
                   {errors.email && (
-                    <p className="text-[11px] text-red-400 mt-0.5">{errors.email}</p>
+                    <p className="text-[11px] text-red-600 mt-0.5">{errors.email}</p>
                   )}
                 </div>
 
                 <div>
-                  <label htmlFor="modal-phone" className="block text-[11px] font-bold uppercase tracking-wider text-neutral-300 mb-1">
+                  <label htmlFor="modal-phone" className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1">
                     Phone Number *
                   </label>
                   <input
@@ -180,17 +184,17 @@ export const WaitlistModal: React.FC<WaitlistModalProps> = ({ isOpen, onClose })
                     value={formData.phone}
                     onChange={handleInputChange}
                     placeholder="+45 ..."
-                    className="w-full px-3 py-2.5 rounded-lg bg-neutral-950 border border-neutral-800 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500"
+                    className="w-full px-3 py-2.5 rounded-lg bg-white border border-slate-300 text-slate-900 text-xs placeholder-slate-400 focus:outline-none focus:border-red-600"
                   />
                   {errors.phone && (
-                    <p className="text-[11px] text-red-400 mt-0.5">{errors.phone}</p>
+                    <p className="text-[11px] text-red-600 mt-0.5">{errors.phone}</p>
                   )}
                 </div>
               </div>
 
               <div className="grid grid-cols-3 gap-3">
-                <div className="col-span-1">
-                  <label htmlFor="modal-city" className="block text-[11px] font-bold uppercase tracking-wider text-neutral-300 mb-1">
+                <div>
+                  <label htmlFor="modal-city" className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1">
                     City *
                   </label>
                   <input
@@ -200,15 +204,15 @@ export const WaitlistModal: React.FC<WaitlistModalProps> = ({ isOpen, onClose })
                     value={formData.city}
                     onChange={handleInputChange}
                     placeholder="City"
-                    className="w-full px-3 py-2.5 rounded-lg bg-neutral-950 border border-neutral-800 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500"
+                    className="w-full px-3 py-2.5 rounded-lg bg-white border border-slate-300 text-slate-900 text-xs placeholder-slate-400 focus:outline-none focus:border-red-600"
                   />
                   {errors.city && (
-                    <p className="text-[11px] text-red-400 mt-0.5">{errors.city}</p>
+                    <p className="text-[11px] text-red-600 mt-0.5">{errors.city}</p>
                   )}
                 </div>
 
-                <div className="col-span-1">
-                  <label htmlFor="modal-country" className="block text-[11px] font-bold uppercase tracking-wider text-neutral-300 mb-1">
+                <div>
+                  <label htmlFor="modal-country" className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1">
                     Country *
                   </label>
                   <select
@@ -216,20 +220,19 @@ export const WaitlistModal: React.FC<WaitlistModalProps> = ({ isOpen, onClose })
                     name="country"
                     value={formData.country}
                     onChange={handleInputChange}
-                    className="w-full px-2 py-2.5 rounded-lg bg-neutral-950 border border-neutral-800 text-white text-xs focus:outline-none focus:border-red-500"
+                    className="w-full px-2 py-2.5 rounded-lg bg-white border border-slate-300 text-slate-900 text-xs focus:outline-none focus:border-red-600"
                   >
                     <option value="Denmark">Denmark</option>
                     <option value="Sweden">Sweden</option>
                     <option value="Norway">Norway</option>
-                    <option value="Finland">Finland</option>
                     <option value="Germany">Germany</option>
                     <option value="United Kingdom">United Kingdom</option>
                     <option value="Other">Other</option>
                   </select>
                 </div>
 
-                <div className="col-span-1">
-                  <label htmlFor="modal-postalCode" className="block text-[11px] font-bold uppercase tracking-wider text-neutral-300 mb-1">
+                <div>
+                  <label htmlFor="modal-postalCode" className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1">
                     Postal Code *
                   </label>
                   <input
@@ -239,16 +242,16 @@ export const WaitlistModal: React.FC<WaitlistModalProps> = ({ isOpen, onClose })
                     value={formData.postalCode}
                     onChange={handleInputChange}
                     placeholder="Postal"
-                    className="w-full px-3 py-2.5 rounded-lg bg-neutral-950 border border-neutral-800 text-white text-xs placeholder-neutral-500 focus:outline-none focus:border-red-500"
+                    className="w-full px-3 py-2.5 rounded-lg bg-white border border-slate-300 text-slate-900 text-xs placeholder-slate-400 focus:outline-none focus:border-red-600"
                   />
                   {errors.postalCode && (
-                    <p className="text-[11px] text-red-400 mt-0.5">{errors.postalCode}</p>
+                    <p className="text-[11px] text-red-600 mt-0.5">{errors.postalCode}</p>
                   )}
                 </div>
               </div>
 
               <div>
-                <label htmlFor="modal-roleInterest" className="block text-[11px] font-bold uppercase tracking-wider text-neutral-300 mb-1">
+                <label htmlFor="modal-roleInterest" className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1">
                   Role / Interest
                 </label>
                 <select
@@ -256,7 +259,7 @@ export const WaitlistModal: React.FC<WaitlistModalProps> = ({ isOpen, onClose })
                   name="roleInterest"
                   value={formData.roleInterest}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2.5 rounded-lg bg-neutral-950 border border-neutral-800 text-white text-xs focus:outline-none focus:border-red-500"
+                  className="w-full px-3 py-2.5 rounded-lg bg-white border border-slate-300 text-slate-900 text-xs focus:outline-none focus:border-red-600"
                 >
                   <option value="believer">Everyday Believer / Youth / Student</option>
                   <option value="evangelist">Aspiring or Active Evangelist</option>
@@ -268,10 +271,10 @@ export const WaitlistModal: React.FC<WaitlistModalProps> = ({ isOpen, onClose })
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-3.5 bg-red-600 hover:bg-red-500 active:bg-red-700 disabled:bg-neutral-700 text-white font-bold text-sm rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer mt-4"
+                className="w-full py-3 bg-red-600 hover:bg-red-700 active:bg-red-800 disabled:bg-slate-300 text-white font-bold text-sm rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer mt-4"
               >
                 {isSubmitting ? (
-                  <span>Reserving...</span>
+                  <span>Reserving Spot...</span>
                 ) : (
                   <>
                     <span>Confirm Waitlist Spot</span>

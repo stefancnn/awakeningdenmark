@@ -1,192 +1,239 @@
 import React, { useState } from 'react';
-import { Users, Compass, Church, Flame, ArrowRight, Check } from 'lucide-react';
+import { Users, Flame, Church, Compass, ArrowRight, X, Check } from 'lucide-react';
+import trainingImg from '../assets/images/evangelism_training_cohort_1793874020498.jpg';
+import evangelistImg from '../assets/images/fire_camp_evangelism_1793697124075.jpg';
+import pastorsImg from '../assets/images/pastors_roundtable_unity_1793874020914.jpg';
+import cphFlagImg from '../assets/images/copenhagen_denmark_flag_1793874884867.jpg';
 
 interface ThePlanProps {
   onOpenWaitlist: () => void;
 }
 
-export const ThePlan: React.FC<ThePlanProps> = ({ onOpenWaitlist }) => {
-  const [activeStep, setActiveStep] = useState<number>(0);
+interface Pillar {
+  num: string;
+  title: string;
+  subtitle: string;
+  icon: React.ElementType;
+  image: string;
+  imageAlt: string;
+  lead: string;
+  points: string[];
+  ctaText: string;
+}
 
-  const steps = [
+export const ThePlan: React.FC<ThePlanProps> = ({ onOpenWaitlist }) => {
+  const [selectedPillar, setSelectedPillar] = useState<Pillar | null>(null);
+
+  const pillars: Pillar[] = [
     {
       num: '01',
       title: 'Training Every Single Christian',
       subtitle: 'To share the gospel in their everyday sphere of influence',
       icon: Users,
-      badge: 'Pillar 1: Mobilization',
-      lead: 'The Great Commission was never meant for an elite few on a stage. It belongs to every single follower of Jesus.',
-      details: [
-        'Overcoming fear with simple, practical, loving evangelism frameworks anyone can use.',
-        'Saturating workplaces, universities, gymnasiums, coffee shops, and family dinner tables across Denmark.',
-        'Equipping everyday believers with testimonies, scripture mastery, and how to pray for healing on the spot.',
-        'Building regular soul-winning habits that transform passive churchgoers into active ambassadors of Christ.',
+      image: trainingImg,
+      imageAlt: 'Young Christians practicing practical 1-on-1 evangelism in Copenhagen',
+      lead: 'The Great Commission is not reserved for a stage. It belongs to every single Christian in Denmark.',
+      points: [
+        'Equipping believers to overcome fear with simple, loving conversation tools.',
+        'Saturating workplaces, universities, coffee shops, and family tables across Denmark.',
+        'Learning how to share a clear testimony and pray for people on the spot.',
       ],
-      impact: 'If just 10,000 Danish Christians lead 2 people to Christ a year, 20,000 souls enter the Kingdom annually.',
+      ctaText: 'Join the Training Waitlist',
     },
     {
       num: '02',
       title: 'Setting Apart Evangelists',
-      subtitle: 'That will reach the nation and further',
+      subtitle: 'To reach the nation, go further, and develop lifelong partnerships',
       icon: Flame,
-      badge: 'Pillar 2: Apostolic Fire',
-      lead: 'Ephesians 4:11 commands the Church to recognize and release the office of the Evangelist.',
-      details: [
-        'Identifying young men and women carrying a relentless burden for the lost.',
-        'Intensive hands-on street and public proclamation training through Fire Camps and field bootcamps.',
-        'Deploying teams into forgotten Danish towns, suburban estates, and university campuses.',
-        'Releasing Danish evangelists into Scandinavia, the Baltic nations, and Europe.',
+      image: evangelistImg,
+      imageAlt: 'Street evangelists in Copenhagen witnessing on the public squares',
+      lead: 'We identify, train, and send dedicated evangelists called to reach Denmark and beyond.',
+      points: [
+        'Intensive hands-on street and public proclamation coaching through CfaN Fire Camps.',
+        'Deploying teams into Danish cities, university hubs, and forgotten towns.',
+        'Reach out to us to develop lifelong partnerships for national outreach.',
       ],
-      impact: 'Raising 100 dedicated, battle-tested evangelists to ignite city-wide revivals across Denmark.',
+      ctaText: 'Partner as an Evangelist',
     },
     {
       num: '03',
       title: 'Commissioning Pastors to Receive the Harvest',
-      subtitle: 'Strengthening local churches for massive discipleship',
+      subtitle: 'Uniting local churches to shepherd and disciple new converts',
       icon: Church,
-      badge: 'Pillar 3: The Shepherds',
-      lead: 'Evangelism without discipleship is a tragedy. Pastors and local churches are the vital home where new converts grow.',
-      details: [
-        'Bridging the critical gap between itinerant evangelism and local church integration.',
-        'Creating practical systems for immediate 24-48 hour follow-up with every new convert.',
-        'Equipping home groups and congregations to welcome post-Christian Danes with patience, love, and doctrine.',
-        'Honoring, encouraging, and refreshing Danish pastors carrying the long-term spiritual weight of the nation.',
+      image: pastorsImg,
+      imageAlt: 'Danish pastors praying together in unity around a table',
+      lead: 'Evangelism without follow-up is incomplete. Pastors and local churches are the home where new believers grow.',
+      points: [
+        'Building 24–48 hour follow-up pathways so every new believer connects with a church.',
+        'Uniting Lutheran, Free Church, Pentecostal, Baptist, and independent pastors.',
+        'Equipping home groups to welcome newly saved Danes with love and discipleship.',
       ],
-      impact: 'Ensuring that every soul won in Denmark is rooted in a healthy, Christ-centered local church family.',
+      ctaText: 'Connect as a Pastor',
     },
     {
       num: '04',
       title: 'Building Bigger Events to Reach the Lost & Unite the Church',
-      subtitle: 'Historic public proclamation campaigns in major arenas',
+      subtitle: 'Citywide proclamation gatherings across Denmark',
       icon: Compass,
-      badge: 'Pillar 4: Mass Awakening',
-      lead: 'Public mass evangelism breaks spiritual ceilings over cities and creates unprecedented unity across denominational lines.',
-      details: [
-        'Organizing city-wide arena and stadium gospel campaigns in Copenhagen, Aarhus, and regional hubs.',
-        'Bringing together Pentecostal, Baptist, Lutheran, Apostolic, and Independent fellowships around one banner: Jesus.',
-        'Unapologetic preaching of the Cross, salvation, repentance, and the power of the Holy Spirit.',
-        'Documenting every salvation decision with direct transfer into participating partner churches.',
+      image: cphFlagImg,
+      imageAlt: 'Historic Copenhagen harbor with Danish flag waving over the city',
+      lead: 'Public proclamation gathers the church under one banner: the name of Jesus Christ.',
+      points: [
+        'Gathering thousands under the simple, unapologetic preaching of the Cross.',
+        'Breaking spiritual ceilings over cities and demonstrating visible Christian unity.',
+        'Documenting salvations with direct handover into local partner congregations.',
       ],
-      impact: 'Demonstrating that the Gospel is not dead in Denmark, but alive, public, and victorious.',
+      ctaText: 'Get Involved in Copenhagen 2027',
     },
   ];
 
   return (
-    <section id="the-plan" className="py-24 bg-white text-neutral-900 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="the-plan" className="py-16 sm:py-24 bg-white text-slate-900">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 text-red-600 font-bold text-xs uppercase tracking-widest mb-3">
+        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-100 text-red-700 font-bold text-xs uppercase tracking-wider mb-3">
             <span className="w-2 h-2 rounded-full bg-red-600" />
-            <span>The 4-Pillar Strategy</span>
+            <span>The 4-Step Strategy</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-neutral-950 uppercase">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-950 uppercase">
             What&apos;s The Plan?
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-neutral-600 leading-relaxed">
-            Revival is not an accident. God responds to hungry hearts and united action. 
-            Here is our comprehensive blueprint to ignite and sustain a national harvest in Denmark.
-          </p>
         </div>
 
-        {/* Step Selector Cards (Desktop / Tablet) */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
-          {steps.map((step, idx) => {
-            const Icon = step.icon;
-            const isCurrent = activeStep === idx;
+        {/* 4 Clean Cards Grid (No jumping tabs - click opens popup modal!) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+          {pillars.map((pillar) => {
+            const Icon = pillar.icon;
             return (
-              <button
-                key={step.num}
-                onClick={() => setActiveStep(idx)}
-                className={`text-left p-6 rounded-2xl transition-all border text-neutral-900 cursor-pointer ${
-                  isCurrent
-                    ? 'bg-neutral-950 text-white border-neutral-950 shadow-xl scale-[1.02]'
-                    : 'bg-neutral-50 hover:bg-neutral-100 border-neutral-200 text-neutral-900'
-                }`}
-                aria-pressed={isCurrent}
+              <div
+                key={pillar.num}
+                className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between group"
               >
-                <div className="flex items-center justify-between mb-4">
-                  <span className={`font-mono font-bold text-sm ${isCurrent ? 'text-red-500' : 'text-neutral-400'}`}>
-                    {step.num}
-                  </span>
-                  <Icon className={`w-5 h-5 ${isCurrent ? 'text-red-500' : 'text-neutral-600'}`} />
+                {/* Photo Header */}
+                <div className="relative h-48 sm:h-56 overflow-hidden bg-slate-100">
+                  <img
+                    src={pillar.image}
+                    alt={pillar.imageAlt}
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute top-3 left-3 bg-slate-950/80 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-mono font-bold">
+                    Pillar {pillar.num}
+                  </div>
                 </div>
-                <h3 className={`font-bold text-base leading-snug mb-1 ${isCurrent ? 'text-white' : 'text-neutral-900'}`}>
-                  {step.title}
-                </h3>
-                <p className={`text-xs line-clamp-2 ${isCurrent ? 'text-neutral-400' : 'text-neutral-500'}`}>
-                  {step.subtitle}
-                </p>
-              </button>
+
+                {/* Card Content */}
+                <div className="p-6 flex-1 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center gap-2 mb-2 text-red-600">
+                      <Icon className="w-5 h-5 shrink-0" />
+                      <span className="text-xs font-bold uppercase tracking-wider">Step {pillar.num}</span>
+                    </div>
+
+                    <h3 className="text-xl font-bold text-slate-950 leading-snug mb-2">
+                      {pillar.title}
+                    </h3>
+                    
+                    <p className="text-sm text-slate-600 leading-relaxed mb-4">
+                      {pillar.subtitle}
+                    </p>
+                  </div>
+
+                  {/* Click to open Clean Pop-up Modal */}
+                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedPillar(pillar)}
+                      className="inline-flex items-center gap-1.5 text-sm font-bold text-red-600 hover:text-red-700 cursor-pointer focus:outline-none"
+                    >
+                      <span>Read Details</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                    <span className="text-xs text-slate-400">Tap to expand</span>
+                  </div>
+                </div>
+              </div>
             );
           })}
         </div>
+      </div>
 
-        {/* Active Step Deep Dive Card */}
-        <div className="bg-neutral-50 border border-neutral-200 rounded-3xl p-8 sm:p-12 shadow-sm">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            <div className="lg:col-span-7">
-              <div className="inline-block text-xs font-bold text-red-600 uppercase tracking-widest mb-3">
-                {steps[activeStep].badge}
-              </div>
-              <h3 className="text-2xl sm:text-3xl font-black text-neutral-950 tracking-tight mb-4">
-                {steps[activeStep].title}
-              </h3>
-              <p className="text-lg text-neutral-700 font-medium leading-relaxed mb-6">
-                {steps[activeStep].lead}
-              </p>
-              
-              <div className="space-y-3 mb-8">
-                {steps[activeStep].details.map((detail, i) => (
-                  <div key={i} className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0 mt-0.5">
-                      <Check className="w-3.5 h-3.5 stroke-[3]" />
-                    </div>
-                    <span className="text-sm sm:text-base text-neutral-700">{detail}</span>
-                  </div>
-                ))}
-              </div>
+      {/* ------------------------------------------------------------- */}
+      {/* CLEAN POP-UP MODAL (Solves the jumping & scrolling problem!)   */}
+      {/* ------------------------------------------------------------- */}
+      {selectedPillar && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-200"
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setSelectedPillar(null)}
+        >
+          <div 
+            className="bg-white rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 relative overflow-hidden text-slate-900"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              type="button"
+              onClick={() => setSelectedPillar(null)}
+              className="absolute top-4 right-4 p-2 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+              aria-label="Close details"
+            >
+              <X className="w-5 h-5" />
+            </button>
 
-              <div className="flex flex-wrap items-center gap-4">
-                <button
-                  onClick={onOpenWaitlist}
-                  className="px-6 py-3 bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-bold rounded-xl text-sm flex items-center gap-2 shadow-lg shadow-red-600/20 transition-all"
-                >
-                  <span>Step Into This Vision</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-                <div className="text-xs text-neutral-500 font-medium">
-                  Copenhagen · Late June 2027 Launch
-                </div>
-              </div>
+            {/* Modal Content */}
+            <div className="flex items-center gap-2 text-xs font-mono font-bold text-red-600 uppercase mb-2">
+              <span>Pillar {selectedPillar.num}</span>
+              <span>·</span>
+              <span>Strategy Blueprint</span>
             </div>
 
-            <div className="lg:col-span-5 bg-white p-6 sm:p-8 rounded-2xl border border-neutral-200">
-              <div className="text-xs font-mono uppercase text-neutral-400 mb-2">Target Impact Metric</div>
-              <div className="text-lg font-bold text-neutral-900 mb-6">
-                {steps[activeStep].impact}
-              </div>
+            <h3 className="text-2xl font-black text-slate-950 mb-3">
+              {selectedPillar.title}
+            </h3>
 
-              <div className="border-t border-neutral-100 pt-6">
-                <div className="text-xs font-mono uppercase text-neutral-400 mb-3">How To Get Involved</div>
-                <div className="space-y-2 text-xs text-neutral-600">
-                  <div className="p-2.5 rounded-lg bg-neutral-50 border border-neutral-100">
-                    <strong>Every Believer:</strong> Join our Fire Camp practical street soul-winning cohorts.
+            <p className="text-sm text-slate-600 leading-relaxed mb-6 font-medium">
+              {selectedPillar.lead}
+            </p>
+
+            {/* Key Action Points */}
+            <div className="space-y-3 mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200/80">
+              {selectedPillar.points.map((point: string, idx: number) => (
+                <div key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-800">
+                  <div className="w-4 h-4 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0 mt-0.5">
+                    <Check className="w-3 h-3 stroke-[3]" />
                   </div>
-                  <div className="p-2.5 rounded-lg bg-neutral-50 border border-neutral-100">
-                    <strong>Evangelists:</strong> Reach out to us and develop lifelong partnership.
-                  </div>
-                  <div className="p-2.5 rounded-lg bg-neutral-50 border border-neutral-100">
-                    <strong>Pastors & Churches:</strong> Partner with us to receive and shepherd incoming harvest souls.
-                  </div>
+                  <span>{point}</span>
                 </div>
-              </div>
+              ))}
+            </div>
+
+            {/* Modal Actions */}
+            <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedPillar(null);
+                  onOpenWaitlist();
+                }}
+                className="w-full sm:flex-1 py-3 px-5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl text-sm shadow-sm transition-all cursor-pointer text-center"
+              >
+                {selectedPillar.ctaText}
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedPillar(null)}
+                className="w-full sm:w-auto py-3 px-5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-sm transition-all cursor-pointer text-center"
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>
-
-      </div>
+      )}
     </section>
   );
 };

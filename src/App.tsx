@@ -9,9 +9,11 @@ import { WaitlistSection } from './components/WaitlistSection';
 import { FAQSection } from './components/FAQSection';
 import { Footer } from './components/Footer';
 import { WaitlistModal } from './components/WaitlistModal';
+import { AdminPortal } from './components/AdminPortal';
 
 export default function App() {
   const [modalOpen, setModalOpen] = useState(false);
+  const [adminOpen, setAdminOpen] = useState(false);
 
   const handleOpenWaitlist = () => {
     // Scroll smoothly to the inline waitlist form, or open modal if mobile/preferred
@@ -24,7 +26,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col font-sans selection:bg-red-600 selection:text-white">
+    <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans selection:bg-red-600 selection:text-white">
       {/* Top Bar Navigation */}
       <Navbar onOpenWaitlist={() => setModalOpen(true)} />
 
@@ -53,10 +55,13 @@ export default function App() {
       </main>
 
       {/* Quiet, authoritative Footer */}
-      <Footer onOpenWaitlist={handleOpenWaitlist} />
+      <Footer onOpenWaitlist={handleOpenWaitlist} onOpenAdmin={() => setAdminOpen(true)} />
 
       {/* Quick Access Modal */}
       <WaitlistModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+
+      {/* Organizer Admin Portal */}
+      <AdminPortal isOpen={adminOpen} onClose={() => setAdminOpen(false)} />
     </div>
   );
 }
